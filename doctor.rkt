@@ -40,10 +40,15 @@
         (append (pick-random '((you seem to think that)
                                (you feel that)
                                (why do you believe that)
-                               (why do you say that))
+                               (why do you say that)
+                               ; task 1
+                               (do you mean that)
+                               (so you are saying that)
+                               (why do you feel that)
+                              )
                 )
                 (change-person user-response)
-        )f
+        )
 )
 
 ; случайный выбор одного из элементов списка lst
@@ -71,7 +76,8 @@
 (define (many-replace replacement-pairs lst)
         (cond ((null? lst) lst)
               (else (let ((pat-rep (assoc (car lst) replacement-pairs))) ; Доктор ищет первый элемент списка в ассоциативном списке замен
-                      (cons (if pat-rep (cadr pat-rep) ; если поиск был удачен, то в начало ответа Доктор пишет замену
+                      (cons (if pat-rep 
+                                (cadr pat-rep) ; если поиск был удачен, то в начало ответа Доктор пишет замену
                                 (car lst) ; иначе в начале ответа помещается начало списка без изменений
                             )
                             (many-replace replacement-pairs (cdr lst)) ; рекурсивно производятся замены в хвосте списка
@@ -87,6 +93,10 @@
                        (many people have the same sorts of feelings)
                        (many of my patients have told me the same thing)
                        (please continue)
+                       ; task 1
+                       (intresting)
+                       (I understand you)
+                       (please tell more about it)
                       )
         )
 )
