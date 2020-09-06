@@ -7,12 +7,14 @@
 (define (visit-doctor name)
   (printf "Hello, ~a!\n" name)
   (print '(what seems to be the trouble?))
-  (doctor-driver-loop name)
+                           ; task 4
+  (doctor-driver-loop name '())
 )
 
 ; цикл диалога Доктора с пациентом
 ; параметр name -- имя пациента
-(define (doctor-driver-loop name)
+                                 ; task 4
+(define (doctor-driver-loop name old-phrases)
     (newline)
     (print '**) ; доктор ждёт ввода реплики пациента, приглашением к которому является **
     (let ((user-response (read)))
@@ -20,19 +22,27 @@
 	    ((equal? user-response '(goodbye)) ; реплика '(goodbye) служит для выхода из цикла
              (printf "Goodbye, ~a!\n" name)
              (print '(see you next week)))
-            (else (print (reply user-response)) ; иначе Доктор генерирует ответ, печатает его и продолжает цикл
-                  (doctor-driver-loop name)
+            (else (print (reply user-response old-phrases)) ; иначе Доктор генерирует ответ, печатает его и продолжает цикл
+                  (doctor-driver-loop name (cons user-response old-phrases))
             )
       )
     )
 )
 
 ; генерация ответной реплики по user-response -- реплике от пользователя 
-(define (reply user-response)
+(define (reply user-response old-phrases)
+  ; task 4
+  (if (null? old-phrases)
       (case (random 2) ; с равной вероятностью выбирается один из двух способов построения ответа
           ((0) (qualifier-answer user-response)) ; 1й способ
           ((1) (hedge))  ; 2й способ
       )
+      (case (random 3) ; с равной вероятностью выбирается один из двух способов построения ответа
+          ((0) (qualifier-answer user-response)) ; 1й способ
+          ((1) (hedge))  ; 2й способ
+          ((2) (history-answer old-phrases))
+      )
+  )
 )
 			
 ; 1й способ генерации ответной реплики -- замена лица в реплике пользователя и приписывание к результату нового начала
@@ -49,6 +59,11 @@
                 )
                 (change-person user-response)
         )
+)
+
+; task 4
+(define (history-answer old-phrases) 
+  (append '(earlier you said that) (pick-random old-phrases))
 )
 
 ; случайный выбор одного из элементов списка lst
