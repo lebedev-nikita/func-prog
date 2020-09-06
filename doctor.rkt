@@ -57,7 +57,6 @@
 )
 
 ; замена лица во фразе			
-        ; (many-replace '((am are)
 (define (change-person phrase)
         (many-replace '((am are)
                         (are am)
@@ -75,37 +74,49 @@
   
 (define (test) (qualifier-answer '(i feel bored)))
 
-; task 2
+; task 3
 (define (many-replace replacement-pairs lst)
-  (let 
-    ((reversed-replaced 
-      (let rec-replace 
-        (
-          (left '())
-          (right lst)
-        )
-        (if (null? right)
-          left
-          (let ((pat-rep (assoc (car right) replacement-pairs))) ; пара (ключ значение) или () ) ; Доктор ищет первый элемент списка в ассоциативном списке замен
-            (let ((new-val (if pat-rep (cadr pat-rep) (car right)))) 
-              (rec-replace (cons new-val left) (cdr right))
-            )
-          )
-        )
-      )
-    ))
-    (let rec-reverse 
-      (
-        (left '())
-        (right reversed-replaced)
-      )
-      (if (null? right)
-        left
-        (rec-reverse (cons (car right) left) (cdr right))
+  (map 
+    (lambda (word)
+      (let ((pat-rep (assoc word replacement-pairs))) ; пара (ключ значение) или () ; Доктор ищет первый элемент списка в ассоциативном списке замен
+        (if pat-rep (cadr pat-rep) word)
       )
     )
+    lst
   )
 )
+
+; ; task 2
+; (define (many-replace replacement-pairs lst)
+;   (let 
+;     ((reversed-replaced 
+;       (let rec-replace 
+;         (
+;           (left '())
+;           (right lst)
+;         )
+;         (if (null? right)
+;           left
+;           (let ((pat-rep (assoc (car right) replacement-pairs))) ; пара (ключ значение) или () ) ; Доктор ищет первый элемент списка в ассоциативном списке замен
+;             (let ((new-val (if pat-rep (cadr pat-rep) (car right)))) 
+;               (rec-replace (cons new-val left) (cdr right))
+;             )
+;           )
+;         )
+;       )
+;     ))
+;     (let rec-reverse 
+;       (
+;         (left '())
+;         (right reversed-replaced)
+;       )
+;       (if (null? right)
+;         left
+;         (rec-reverse (cons (car right) left) (cdr right))
+;       )
+;     )
+;   )
+; )
 
 ; ; осуществление всех замен в списке lst по ассоциативному списку replacement-pairs
 ; (define (many-replace replacement-pairs lst)
